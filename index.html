@@ -5,405 +5,436 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>乡音探事</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft Yahei",sans-serif}
-body{background:#f8f3e9;color:#333;overflow-x:hidden}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-h1{font-size:24px;color:#6b3f24}
-.progress-wrap{flex:1;margin:0 20px}
-.progress-text{font-size:14px;margin-bottom:4px}
-.progress-bar{width:100%;height:14px;background:#e2d6c6;border-radius:99px;overflow:hidden}
-.progress-inner{height:100%;background:#b8734a;transition:0.4s;width:0%}
-.btn{padding:10px 18px;border:none;border-radius:8px;background:#b8734a;color:#fff;font-size:15px;cursor:pointer;transition:0.2s}
-.btn:disabled{background:#aaa;cursor:not-allowed}
-.btn-secondary{background:#7a5c48}
-.scene{background:#fffdf8;border-radius:12px;padding:24px;min-height:420px;position:relative}
-.scene-title{font-size:20px;margin-bottom:12px;color:#6b3f24}
-.scene-desc{margin-bottom:20px;line-height:1.6}
-.point-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
-.point-item{border:1px solid #ddcbb8;border-radius:10px;padding:14px;cursor:pointer;transition:0.2s}
-.point-item:hover{background:#fff4e8}
-.point-item.locked{opacity:0.6}
-.point-name{font-weight:bold;margin-bottom:6px}
-.sidebar{position:fixed;top:0;right:0;width:320px;height:100vh;background:#fffdf8;border-left:1px solid #ddcbb8;padding:20px;overflow-y:auto;transform:translateX(100%);transition:0.3s;z-index:90}
-.sidebar.open{transform:translateX(0)}
-.sidebar-tab{display:flex;gap:6px;margin-bottom:12px}
-.sidebar-tab button{flex:1;padding:6px;border:1px solid #ddcbb8;background:#fff;border-radius:6px;cursor:pointer}
-.sidebar-tab button.active{background:#b8734a;color:#fff;border-color:#b8734a}
-.clue-item{padding:10px;border-bottom:1px solid #eee}
-.clue-lock{color:#888}
-.clue-word{color:#b8734a;font-weight:bold}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:100;display:none}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+body{
+  background:#1b1410;
+  color:#efe3cf;
+  overflow-x:hidden;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(184,115,74,0.12), transparent 26%),
+    radial-gradient(circle at 80% 80%, rgba(62,82,64,0.18), transparent 28%);
+}
+.container{max-width:1140px;margin:0 auto;padding:24px}
+/* ========== 全局导航栏 ========== */
+.nav-wrap{
+  position:sticky;top:0;z-index:99;
+  background:rgba(24,18,14,0.94);
+  border-bottom:1px solid rgba(212,175,55,0.22);
+  padding:16px 20px;
+}
+.nav-inner{
+  max-width:1140px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  flex-wrap:wrap;
+}
+.nav-btn{
+  padding:10px 16px;border:none;border-radius:10px;cursor:pointer;
+  background:linear-gradient(180deg,#8a5a3b,#6b3f24);
+  color:#fff3cf;font-size:15px;letter-spacing:1px;
+  border:1px solid rgba(243,217,138,0.25);
+  box-shadow:0 8px 20px rgba(0,0,0,0.35);
+  transition:.2s;
+}
+.nav-btn:hover{filter:brightness(1.12)}
+.nav-btn:disabled{background:#3a3029;color:#8a7a66;cursor:not-allowed;filter:none}
+.nav-btn.main{
+  padding:14px 28px;font-size:18px;
+  background:linear-gradient(180deg,#b8734a,#f3d98a);
+  color:#241a14;font-weight:bold;
+  box-shadow:0 0 18px rgba(243,217,138,0.35);
+}
+.nav-btn.placeholder{
+  background:#332b24;color:#92846c;
+}
+/* ========== 首页样式 ========== */
+.home-page{
+  min-height:calc(100vh - 100px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:30px 20px;text-align:center;
+}
+.home-title{font-size:36px;color:#f3d98a;margin-bottom:12px;letter-spacing:4px}
+.home-slogan{font-size:18px;color:#d9c79c;margin-bottom:8px}
+.home-desc{max-width:620px;color:#b8a884;margin-top:24px;line-height:1.8}
+/* ========== 通用面板 ========== */
+.panel{
+  background:rgba(30,22,18,0.72);
+  border:1px solid rgba(212,175,55,0.22);
+  border-radius:16px;padding:24px;margin-top:20px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.45);
+}
+.panel-title{
+  font-size:20px;color:#f3d98a;margin-bottom:16px;
+  padding-left:12px;border-left:4px solid #b8734a;
+}
+/* ========== 场景页面 ========== */
+.scene{min-height:460px;position:relative}
+.scene-title{
+  font-size:20px;color:#f3d98a;margin-bottom:14px;
+  padding-left:12px;border-left:4px solid #b8734a;
+}
+.scene-desc{margin-bottom:22px;line-height:1.75;color:#e3d2a7}
+.point-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:22px}
+.point-item{
+  border:1px solid rgba(243,217,138,0.2);border-radius:12px;padding:14px;cursor:pointer;
+  background:rgba(60,42,30,0.45);transition:.25s;position:relative;overflow:hidden;
+}
+.point-item::before{
+  content:"";position:absolute;left:0;top:0;width:4px;height:100%;
+  background:#b8734a;transform:scaleY(0);transform-origin:top;transition:.3s;
+}
+.point-item:hover{background:rgba(80,56,40,0.55);transform:translateY(-2px)}
+.point-item:hover::before{transform:scaleY(1)}
+.point-item.locked{opacity:.55}
+.point-name{font-weight:bold;margin-bottom:6px;color:#ffd98b}
+.point-text{color:#d9c79c;font-size:14px}
+.nav-row{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+.btn{
+  padding:10px 18px;border:none;border-radius:10px;cursor:pointer;
+  background:linear-gradient(180deg,#8a5a3b,#6b3f24);
+  color:#fff3cf;font-size:15px;letter-spacing:1px;
+  border:1px solid rgba(243,217,138,0.25);
+  box-shadow:0 8px 20px rgba(0,0,0,0.35);
+  transition:.2s;
+}
+.btn:hover{filter:brightness(1.12)}
+.btn:disabled{background:#3a3029;color:#8a7a66;cursor:not-allowed;filter:none}
+.btn-secondary{background:linear-gradient(180deg,#3e5240,#253328)}
+.foot-tip{margin-top:10px;font-size:13px;color:#a89778}
+.help-btn{position:absolute;bottom:18px;right:18px}
+/* ========== 词库页面 ========== */
+.word-item{
+  padding:12px;border-bottom:1px dashed rgba(243,217,138,0.12);
+  line-height:1.65;color:#efe3cf;
+}
+.word-item.locked{color:#776b58}
+.word-title{color:#ffd98b;font-weight:bold}
+/* ========== 未解锁面板 ========== */
+.unlock-group{margin-bottom:18px}
+.unlock-group h4{color:#f3d98a;margin-bottom:8px}
+.unlock-item{padding:8px 0;color:#d9c79c}
+/* ========== 卷宗弹窗 ========== */
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,0.55);
+  display:none;align-items:center;justify-content:center;z-index:100;
+}
 .modal.open{display:flex}
-.modal-box{background:#fffdf8;border-radius:12px;width:90%;max-width:520px;padding:24px}
-.modal-title{font-size:18px;margin-bottom:12px;color:#6b3f24}
-.opt-item{padding:10px;border:1px solid #ddcbb8;border-radius:8px;margin:8px 0;cursor:pointer;transition:0.2s}
-.opt-item:hover{background:#fff4e8}
-.opt-item.correct{background:#c8e6c9;border-color:#66bb6a}
-.opt-item.wrong{background:#ffdddd;border-color:#ef6c6c}
-.nav-row{display:flex;gap:12px;margin-top:16px}
-.tip-text{margin:12px 0;color:#555;line-height:1.5}
-.cert{border:2px solid #b8734a;border-radius:12px;padding:24px;text-align:center;background:#fff8ee}
-.cert h2{color:#6b3f24}
-.cert-stamp{margin:16px auto;width:100px;height:100px;border:3px solid #b8734a;border-radius:50%;display:grid;place-items:center;font-weight:bold;color:#b8734a;rotate:-12deg}
-.foot-tip{margin-top:12px;font-size:13px;color:#777}
-.help-btn{position:absolute;bottom:16px;right:16px}
+.modal-box{
+  background:rgba(30,22,18,0.92);
+  border:1px solid rgba(243,217,138,0.3);
+  border-radius:16px;width:92%;max-width:540px;padding:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.55);
+}
+.modal-title{font-size:18px;color:#f3d98a;margin-bottom:14px}
+.opt-item{
+  padding:12px;border:1px solid rgba(243,217,138,0.18);
+  border-radius:10px;margin:10px 0;cursor:pointer;background:rgba(60,42,30,0.45);
+  color:#efe3cf;transition:.2s;
+}
+.opt-item:hover{background:rgba(80,56,40,0.55)}
+.opt-item.correct{background:rgba(102,187,106,0.18);border-color:#66bb6a;color:#d7ffd7}
+.opt-item.wrong{background:rgba(239,108,108,0.18);border-color:#ef6c6c;color:#ffd6d6}
+.tip-text{margin:12px 0;line-height:1.75;color:#e3d2a7}
+/* ========== 证书页面 ========== */
+.cert{
+  border:2px solid #f3d98a;border-radius:16px;padding:26px;text-align:center;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(243,217,138,0.08), transparent 70%),
+    linear-gradient(180deg,#3a2a1e,#241a14);
+  box-shadow:0 18px 45px rgba(0,0,0,0.45);
+}
+.cert h2{color:#f3d98a;margin-bottom:14px}
+.cert-stamp{
+  margin:18px auto;width:110px;height:110px;border:3px solid #f3d98a;
+  border-radius:50%;display:grid;place-items:center;font-weight:bold;color:#f3d98a;
+  rotate:-12deg;font-size:14px;line-height:1.4;
+  background:rgba(243,217,138,0.06);
+}
+.cert p{line-height:1.85;color:#efe3cf;margin:10px 0}
+input{
+  padding:8px 12px;border-radius:8px;border:1px solid rgba(243,217,138,0.3);
+  background:rgba(60,42,30,0.45);color:#efe3cf;outline:none;
+}
 </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1>乡音探事</h1>
-<div class="progress-wrap">
-<div class="progress-text">线索：<span id="got">0</span>/8</div>
-<div class="progress-bar"><div class="progress-inner" id="bar"></div></div>
+<div class="nav-wrap">
+  <div class="nav-inner">
+    <button class="nav-btn placeholder" id="btnShop">商店</button>
+    <button class="nav-btn" id="btnWord">词库</button>
+    <button class="nav-btn main" id="btnStart">开始调查</button>
+    <button class="nav-btn" id="btnPaper">卷宗</button>
+    <button class="nav-btn" id="btnUnlock">未解锁</button>
+  </div>
 </div>
-<div>
-<button class="btn" id="openSide">线索档案 / 词库</button>
-</div>
-</header>
+<div class="container" id="app"></div>
 
-<div class="scene" id="sceneBox">
-<div id="sceneContent"></div>
-</div>
-</div>
-
-<!-- 侧边栏 -->
-<div class="sidebar" id="side">
-<div class="sidebar-tab">
-<button class="active" data-tab="clue">线索档案</button>
-<button data-tab="word">乡音词库</button>
-</div>
-<div id="tab-clue"></div>
-<div id="tab-word" style="display:none"></div>
-</div>
-
-<!-- 弹窗：答题 / 提示 / 卷宗 -->
 <div class="modal" id="modal">
-<div class="modal-box">
-<div class="modal-title" id="mTitle"></div>
-<div id="mBody"></div>
-<div class="nav-row" id="mNav"></div>
-</div>
+  <div class="modal-box">
+    <div class="modal-title" id="mTitle"></div>
+    <div id="mBody"></div>
+    <div class="nav-row" id="mNav"></div>
+  </div>
 </div>
 
 <script>
-const SAVE_KEY = "xiangyin_save_v3";
+const SAVE_KEY = "xiangyin_save_v4";
 const state = {
-    scene:0, // 0开场,1杂货店,2龙眼林,3礁石滩,4代书摊,5卷宗,6证书
-    clues:Array(8).fill(false),
-    wrongCount:0,
-    tipCd:0,
-    playerName:""
+  page:"home",
+  sceneIdx:0,
+  clues:Array(8).fill(false),
+  wrongCount:0,
+  tipCd:0,
+  playerName:""
 };
 const scenes = [
-{
+  {
     title:"欢迎来到乡音探事",
-    desc:`这片海边侨乡，藏着一段番客的往事。
-所有线索都藏在场景之中，未解锁只会显示???。
-完成乡音小考题解锁线索，留心线索里的细节，它们彼此关联，最后你要依靠全部线索，推理出完整真相。
-探索顺序：杂货店 → 龙眼林 → 礁石滩 → 侨批代书摊
-集齐全部线索，前往卷宗台提交你的推理，领取乡音调查证！`,
+    desc:`这片海边侨乡，藏着一段番客的往事。\n所有线索都藏在场景之中，未解锁只会显示“？？？”。\n完成乡音小考题解锁线索，留心线索细节，它们彼此关联。\n探索顺序：杂货店 → 龙眼林 → 礁石滩 → 侨批代书摊\n集齐全部线索，前往卷宗提交推理。`,
     points:[],
     nav:[{txt:"出发探索",next:1}]
-},
-{
+  },
+  {
     title:"场景一｜杂货店",
     desc:"老木柜台、粗陶罐、竹篮、油灯、抽屉，是侨眷托店主帮忙采买、代收侨批的地方。",
     points:[
-        {idx:0,name:"陶罐",q:"陶罐外壁的刻痕，店主用来做什么？",opts:["登记侨眷托买的丝线、灯油等日用货品","标记陶罐烧制年份","祈福画符"],ans:0,clue:`陶罐刻痕：杂货店主用闽南俗字记账，登记一位妇人托买的丝线、灯油，等侨批捎来的银钱结账。【伏笔】这位妇人是阿发的妻子，拿钱是阿发从南洋寄回来的。`,word:`生理｜seng-lí｜生意、买卖；旧时侨乡把买卖营生叫生理`},
-        {idx:1,name:"柜台抽屉",q:"抽屉里的草稿，是侨批最常写的一句牵挂，这句话是？",opts:["盼平安，银钱已托船客捎回","明日出海，风浪难料","龙眼熟了，等你回来采摘"],ans:0,clue:`抽屉侨批草稿：草稿字迹属于一位下南洋的番客，信里写道：盼平安，银钱已托船客捎回，给家里添日用。【伏笔】关联银钱用来杂货店采买、暗语记录金额`,word:`厝｜tshù｜家；寄银返厝 = 寄钱回家`}
+      {idx:0,name:"陶罐",q:"陶罐外壁的刻痕，店主用来做什么？",opts:["登记侨眷托买的丝线、灯油等日用货品","标记陶罐烧制年份","祈福画符"],ans:0,clue:"陶罐刻痕：杂货店主用闽南俗字记账，登记一位妇人托买丝线、灯油，等侨批捎来银钱结账。",word:"生理｜seng-lí｜生意、买卖；旧时侨乡把营生叫生理"},
+      {idx:1,name:"柜台抽屉",q:"抽屉里的草稿，是侨批最常写的牵挂？",opts:["盼平安，银钱托船客捎回","明日出海，风浪难料","龙眼熟了，等你回来采摘"],ans:0,clue:"抽屉侨批草稿：一位南洋番客写下，盼家人平安，银钱托船客捎回，补贴家用。",word:"厝｜tshù｜家；寄银返厝 = 寄钱回家"}
     ],
     nav:[{txt:"前往龙眼林",next:2}],
-    tip:"留意货架上的陶罐和柜台抽屉"
-},
-{
+    tip:"留意货架上的陶罐与抽屉"
+  },
+  {
     title:"场景二｜龙眼林",
-    desc:"成片老龙眼树、石条凳、落叶小路，是旧时侨眷等候船客、打听番客消息的地方。",
+    desc:"成片老龙眼树、石凳、落叶小路，是侨眷等候船客、打听南洋亲人消息的地方。",
     points:[
-        {idx:2,name:"老龙眼树根",q:"播放闽南短句「阿母，我会好好趁食」，这句话是谁在这里互相转告？",opts:["等候出海亲人的乡人，互相传递平安消息","商人谈生意","孩童童谣"],ans:0,clue:`老龙眼树下常有妇人带着孩子久坐，船客上岸之后，会在这里转述南洋番客捎回的口头平安话。【伏笔】就是阿发的妻、儿在此等候消息`,word:`趁食｜thàn-tsia̍h｜谋生、赚钱；趁食就是出外打拼讨生活`}
+      {idx:2,name:"老龙眼树根",q:"闽南短句「阿母，我会好好趁食」是谁在这里相传？",opts:["等候亲人的乡人互相传递平安消息","商人谈生意","孩童童谣"],ans:0,clue:"龙眼树下常有妇人带着孩子久坐，船客上岸后转述南洋番客捎回的平安话。",word:"趁食｜thàn-tsia̍h｜谋生、赚钱；趁食就是出外打拼"}
     ],
     nav:[{txt:"前往礁石滩",next:3}],
-    tip:"去老树根附近看一看"
-},
-{
+    tip:"多留意老树根旁的闲谈"
+  },
+  {
     title:"场景三｜礁石滩",
-    desc:"海浪、黑色礁石、旧渔网、贝壳、石码头，红头船从这里出发，也在这里靠岸。",
+    desc:"海浪、黑礁石、旧渔网、贝壳、石码头，红头船从这里出发，也在这里靠岸。",
     points:[
-        {idx:3,name:"礁石刻痕",q:"礁石浅浅刻下的记号，渔民用来记录？",opts:["潮汐起落、预估归船的日期","鱼群位置","游客标记"],ans:0,clue:`渔民用礁石、贝壳标记潮汐，潮水时机决定红头船能不能平安靠岸，等候的人会来这里看潮，盼亲人归来。【伏笔】妇人会到礁石滩看潮水，推算船什么时候到`,word:`潮｜tiô｜潮水；看潮候，就是看潮汐时机`},
-        {idx:4,name:"旧渔网",q:"渔网里半张侨批封，本地番客大多去往哪里趁食？",opts:["南洋（番边）","福州","泉州城内"],ans:0,clue:`这封侨批寄往唐山（家乡），寄信人在南洋番边趁食，走红头船海路跨海投递。【伏笔】寄信人就是阿发，人在南洋`,word:`番边｜huan-pinn｜南洋；过番，动身去南洋打拼`}
+      {idx:3,name:"礁石刻痕",q:"礁石浅浅刻下记号，渔民用来记录？",opts:["潮汐起落，预估归船时间","鱼群位置","游客标记"],ans:0,clue:"渔民在礁石刻痕记录潮汐，潮水合适红头船才能靠岸，家人在此等候归人。",word:"潮｜tiô｜潮水；看潮候，等船归"},
+      {idx:4,name:"旧渔网",q:"渔网中半张侨批封，番客大多去往何处趁食？",opts:["南洋（番边）","福州","泉州城内"],ans:0,clue:"侨批寄回唐山故土，寄信人在南洋番边谋生，搭乘红头船跨海传信。",word:"番边｜huan-pinn｜南洋；过番，动身去南洋打拼"}
     ],
     nav:[{txt:"前往侨批代书摊",next:4}],
-    tip:"礁石和渔网藏着线索"
-},
-{
+    tip:"礁石、渔网藏着线索"
+  },
+  {
     title:"场景四｜侨批代书摊",
-    desc:"木摊、毛笔、信笺、信封、算盘；很多不识字的侨眷、番客，会找代书先生写侨批，还会用闽南谐音暗语藏汇款金额。",
+    desc:"木摊、毛笔、信笺、信封、算盘；很多番客不识字，请代书先生写侨批，还用暗语记汇款。",
     points:[
-        {idx:5,name:"代书先生的信笺",q:"闽南话「囝仔」是什么意思？",opts:["孩子、儿女","稻米","小船"],ans:0,clue:`代书先生回忆，常帮一位南洋番客写信，信里反复叮嘱，要照顾好家中囝仔，送囝仔读册。【伏笔】对应龙眼林等候的母子，就是这位番客的妻儿`,word:`囝仔｜kiáⁿ-á｜小孩；读册｜tha̍k-tsheh｜读书`},
-        {idx:6,name:"算盘旁的暗语字条",q:"字条写「杉兄」，杉=3，兄=百，代表多少钱？",opts:["三百","三十","三千"],ans:0,clue:`番客不识字，和代书先生约定暗语，用「杉兄」代表三百银，藏在信里，外人看不懂，同乡才知是寄回家的钱。【伏笔】这笔三百银，就是给妻子在杂货店买家用的钱`,word:`糖仔｜thn̂g-á｜侨批暗语，代指钱款；信里写寄糖仔，就是寄钱`},
-        {idx:7,name:"摊边歌谣纸片",q:"闽南歌谣「一溪目汁一船人」，目汁是什么？",opts:["眼泪","海水","米酒"],ans:0,clue:`代书先生说，当年阿发上船过番那天，妻儿在岸边目汁直流，这封封侨批，就是山海相隔的念想。【伏笔】收拢全部情绪，串联所有人物`,word:`目汁｜ba̍k-tsi｜眼泪；闽南很有画面感的词`}
+      {idx:5,name:"代书先生的信笺",q:"闽南话「囝仔」是什么意思？",opts:["孩子、儿女","稻米","小船"],ans:0,clue:"代书先生常帮南洋番客写信，叮嘱家人照料囝仔，送囝仔读书。",word:"囝仔｜kiáⁿ-á｜小孩；读册就是读书"},
+      {idx:6,name:"算盘旁暗语字条",q:"字条写「杉兄」，杉=3，兄=百，代表多少钱？",opts:["三百","三十","三千"],ans:0,clue:"番客和代书先生约定暗语，杉兄代表三百银，外人看不懂，同乡才明白。",word:"糖仔｜thn̂g-á｜侨批暗语代指钱款；写糖仔就是寄钱"},
+      {idx:7,name:"摊边歌谣纸片",q:"歌谣「一溪目汁一船人」里的目汁是？",opts:["眼泪","海水","米酒"],ans:0,clue:"阿发当年登船下南洋，妻儿在岸边流泪，侨批承载山海思念。",word:"目汁｜ba̍k-tsi｜眼泪；闽南很有画面感的词"}
     ],
-    nav:[{txt:"打开卷宗台",next:5}],
-    tip:"信笺、算盘字条、歌谣纸片都可以看一看"
-}
+    nav:[{txt:"查看卷宗",next:"paper"}],
+    tip:"信笺、算盘、歌谣纸片都可以细看"
+  }
 ];
-const certWordList = [
-"生理｜seng-lí｜生意、买卖",
-"厝｜tshù｜家",
-"趁食｜thàn-tsia̍h｜谋生、赚钱",
-"潮｜tiô｜潮水",
-"番边｜huan-pinn｜南洋",
-"囝仔｜kiáⁿ-á｜小孩",
-"读册｜tha̍k-tsheh｜读书",
-"糖仔｜thn̂g-á｜侨批暗语代指钱款",
-"目汁｜ba̍k-tsi｜眼泪"
+const wordList = [
+  {idx:0,text:"生理｜seng-lí｜生意、买卖；旧时侨乡把营生叫生理"},
+  {idx:1,text:"厝｜tshù｜家；寄银返厝 = 寄钱回家"},
+  {idx:2,text:"趁食｜thàn-tsia̍h｜谋生、赚钱；趁食就是出外打拼"},
+  {idx:3,text:"潮｜tiô｜潮水；看潮候，等船归"},
+  {idx:4,text:"番边｜huan-pinn｜南洋；过番，动身去南洋打拼"},
+  {idx:5,text:"囝仔｜kiáⁿ-á｜小孩；读册就是读书"},
+  {idx:6,text:"糖仔｜thn̂g-á｜侨批暗语代指钱款；写糖仔就是寄钱"},
+  {idx:7,text:"目汁｜ba̍k-tsi｜眼泪；闽南很有画面感的词"}
 ];
+const unlockMeta = [
+  {type:"clue",idx:0,desc:"陶罐刻痕线索｜杂货店"},
+  {type:"clue",idx:1,desc:"侨批草稿线索｜杂货店"},
+  {type:"clue",idx:2,desc:"龙眼树下平安话｜龙眼林"},
+  {type:"clue",idx:3,desc:"礁石刻痕潮汐记录｜礁石滩"},
+  {type:"clue",idx:4,desc:"旧渔网侨批封｜礁石滩"},
+  {type:"clue",idx:5,desc:"囝仔信笺｜代书摊"},
+  {type:"clue",idx:6,desc:"杉兄暗语｜代书摊"},
+  {type:"clue",idx:7,desc:"目汁歌谣｜代书摊"},
+];
+const modalEl = document.getElementById("modal");
+const mTitle = document.getElementById("mTitle");
+const mBody = document.getElementById("mBody");
+const mNav = document.getElementById("mNav");
+const app = document.getElementById("app");
 function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
 function load(){
-    const raw = localStorage.getItem(SAVE_KEY);
-    if(raw) Object.assign(state,JSON.parse(raw));
+  const raw = localStorage.getItem(SAVE_KEY);
+  if(raw) Object.assign(state,JSON.parse(raw));
 }
-function gotCount(){return state.clues.filter(x=>x).length}
-function renderProgress(){
-    const g = gotCount();
-    document.getElementById("got").innerText = g;
-    document.getElementById("bar").style.width = (g/8*100)+"%";
-}
-function renderSide(){
-    const clueWrap = document.getElementById("tab-clue");
-    const wordWrap = document.getElementById("tab-word");
-    let clueHtml = "";
-    for(let i=0;i<8;i++){
-        const p = scenes.find(s=>s.points?.some(x=>x.idx===i))?.points.find(x=>x.idx===i);
-        if(state.clues[i]){
-            clueHtml += `<div class="clue-item"><div>${p.clue}</div><div class="clue-word">【乡音】${p.word}</div></div>`;
-        }else{
-            clueHtml += `<div class="clue-item clue-lock">线索${i+1}：???</div>`;
-        }
-    }
-    clueWrap.innerHTML = clueHtml;
-    let wordHtml = "";
-    const unlocked = [];
-    for(let i=0;i<8;i++)if(state.clues[i])unlocked.push(i);
-    unlocked.forEach(idx=>{
-        const p = scenes.find(s=>s.points?.some(x=>x.idx===idx))?.points.find(x=>x.idx===idx);
-        wordHtml += `<div class="clue-item">${p.word}</div>`;
-    })
-    if(!wordHtml) wordHtml = "<div class='clue-item clue-lock'>还没有解锁词汇</div>";
-    wordWrap.innerHTML = wordHtml;
-}
-function renderScene(){
-    const s = scenes[state.scene];
-    const box = document.getElementById("sceneContent");
-    let html = `<div class="scene-title">${s.title}</div><div class="scene-desc">${s.desc.replace(/\n/g,"<br>")}</div>`;
-    if(s.points && s.points.length>0){
-        html += `<div class="point-list">`;
-        s.points.forEach(pt=>{
-            const lock = state.clues[pt.idx];
-            html += `<div class="point-item ${lock?'locked':''}" data-idx="${pt.idx}">
-                <div class="point-name">${pt.name} ${lock?"✅已解锁":"✨可探索"}</div>
-                <div>${lock?"这条线索你已经解锁。":"点击开启乡音小考题"}</div>
-            </div>`;
-        })
-        html += `</div>`;
+function getClueCount(){return state.clues.filter(x=>x).length}
+function openModal(){modalEl.classList.add("open")}
+function closeModal(){modalEl.classList.remove("open")}
+function render(){
+  const cnt = getClueCount();
+  app.innerHTML = "";
+  if(state.page==="home"){
+    app.innerHTML = `
+      <div class="home-page">
+        <div class="home-title">乡音探事</div>
+        <div class="home-slogan">一纸侨批，山海乡音</div>
+        <div class="home-desc">闽南侨乡研学解谜小游戏，跟随侨批，探寻番客下南洋的往事。收集线索，解锁词汇，完成卷宗推理。</div>
+      </div>
+    `;
+  }else if(state.page==="scene"){
+    const s = scenes[state.sceneIdx];
+    let html = `<div class="panel scene"><div class="scene-title">${s.title}</div><div class="scene-desc">${s.desc.replace(/\n/g,"<br>")}</div>`;
+    if(s.points.length>0){
+      html += `<div class="point-list">`;
+      s.points.forEach(p=>{
+        const lock = state.clues[p.idx];
+        html += `
+          <div class="point-item ${lock?'locked':''}" data-pidx="${p.idx}">
+            <div class="point-name">${p.name} ${lock?"✅已解锁":"✨可探索"}</div>
+            <div class="point-text">${lock?"这条线索已经解锁。":"点击开启考题"}</div>
+          </div>
+        `;
+      });
+      html += `</div>`;
     }
     html += `<div class="nav-row">`;
-    if(s.nav){
-        s.nav.forEach(n=>{
-            if(n.next ===5){
-                const allGot = gotCount()>=8;
-                html += `<button class="btn" ${allGot?"":"disabled"} data-next="${n.next}">${n.txt}</button>`;
-                if(!allGot) html += `<div class="foot-tip">线索尚不完整，还不足以推导出真相</div>`;
-            }else{
-                html += `<button class="btn" data-next="${n.next}">${n.txt}</button>`;
-            }
-        })
-    }
+    s.nav.forEach(n=>{
+      if(n.next==="paper"){
+        html += `<button class="btn" ${cnt>=8?"":"disabled"} data-next="paper">${n.txt}</button>`;
+      }else{
+        html += `<button class="btn" data-next="${n.next}">${n.txt}</button>`;
+      }
+    });
     html += `</div>`;
-    if(s.tip){
-        html += `<button class="btn btn-secondary help-btn" id="helpBtn">💡提示（冷却40s）</button>`;
-    }
-    box.innerHTML = html;
-    document.querySelectorAll(".point-item").forEach(el=>{
-        el.onclick = ()=>{
-            const i = Number(el.dataset.idx);
-            if(state.clues[i]) return;
-            openQuiz(i);
+    if(s.tip) html += `<div class="foot-tip">💡提示：${s.tip}</div>`;
+    html += `</div>`;
+    app.innerHTML = html;
+    app.querySelectorAll(".point-item").forEach(el=>{
+      el.onclick = ()=>{
+        const pid = +el.dataset.pidx;
+        if(state.clues[pid]) return;
+        openQuiz(pid);
+      }
+    });
+    app.querySelectorAll(".btn[data-next]").forEach(el=>{
+      el.onclick = ()=>{
+        const v = el.dataset.next;
+        if(v==="paper"){
+          if(cnt>=8){openPaper()}else alert("线索不足，暂时无法打开卷宗");
+        }else{
+          state.page="scene";state.sceneIdx=+v;save();render();
         }
+      }
     })
-    document.querySelectorAll("[data-next]").forEach(el=>{
-        el.onclick = ()=>{
-            const n = Number(el.dataset.next);
-            if(n===5){
-                state.scene = 5;
-                state.wrongCount = 0;
-                renderScene();
-                renderSide();
-                renderProgress();
-                openPaper();
-            }else if(n===6){
-                state.scene = 6;
-                renderScene();
-                renderSide();
-                renderProgress();
-            }else{
-                state.scene = n;
-                renderScene();
-                renderSide();
-                renderProgress();
-            }
-            save();
-        }
+  }else if(state.page==="word"){
+    let html = `<div class="panel"><div class="panel-title">词库</div>`;
+    wordList.forEach(w=>{
+      const ok = state.clues[w.idx];
+      html += `<div class="word-item ${ok?"":"locked"}">`;
+      if(ok){html += `<div class="word-title">${w.text}</div>`;}else{html += `<div>？？？尚未解锁</div>`}
+      html += `</div>`;
     })
-    const helpBtn = document.getElementById("helpBtn");
-    if(helpBtn){
-        helpBtn.onclick = ()=>{
-            if(state.tipCd>0) return alert(`提示冷却中：${state.tipCd}秒`);
-            alert("💡提示："+s.tip);
-            state.tipCd = 40;
-            const cdTimer = setInterval(()=>{
-                state.tipCd--;
-                if(state.tipCd<=0) clearInterval(cdTimer);
-            },1000);
-            save();
-        }
-    }
-}
-function openQuiz(idx){
-    const allPts = [];
-    scenes.forEach(s=>{if(s.points) allPts.push(...s.points)});
-    const pt = allPts.find(x=>x.idx===idx);
-    const modal = document.getElementById("modal");
-    document.getElementById("mTitle").innerText = pt.q;
-    let optHtml = "";
-    pt.opts.forEach((o,i)=>{
-        optHtml += `<div class="opt-item" data-opt="${i}">${o}</div>`;
+    html += `</div>`;
+    app.innerHTML = html;
+  }else if(state.page==="unlock"){
+    let html = `<div class="panel"><div class="panel-title">未解锁清单</div>`;
+    html += `<div class="unlock-group"><h4>未解锁线索</h4>`;
+    unlockMeta.forEach(u=>{
+      if(!state.clues[u.idx]) html += `<div class="unlock-item">• ${u.desc}</div>`
     })
-    document.getElementById("mBody").innerHTML = optHtml;
-    document.getElementById("mNav").innerHTML = `<button class="btn" id="closeM">关闭</button>`;
-    modal.classList.add("open");
-    document.querySelectorAll(".opt-item").forEach(el=>{
-        el.onclick = ()=>{
-            const sel = Number(el.dataset.opt);
-            document.querySelectorAll(".opt-item").forEach(e=>e.classList.remove("correct","wrong"));
-            if(sel === pt.ans){
-                el.classList.add("correct");
-                state.clues[idx] = true;
-                setTimeout(()=>{
-                    modal.classList.remove("open");
-                    renderScene();
-                    renderSide();
-                    renderProgress();
-                    save();
-                },800);
-            }else{
-                el.classList.add("wrong");
-                setTimeout(()=>el.classList.remove("wrong"),600);
-            }
-        }
-    })
-    document.getElementById("closeM").onclick = ()=>modal.classList.remove("open");
-}
-function openPaper(){
-    const modal = document.getElementById("modal");
-    document.getElementById("mTitle").innerText = "卷宗｜推理提交";
-    document.getElementById("mBody").innerHTML = `
-    <div class="tip-text">你已经收集齐全部线索，请结合所有线索，梳理整件往事，选出这个故事的真相。<br>侧边可以随时点开线索档案、词库回看。</div>
-    <div class="opt-item" data-opt="0">A. 名叫阿发的番客远赴南洋趁食，不识字，委托代书先生写侨批，用暗语寄银钱回家；妻子带着囝仔在家乡，在龙眼林等候消息、礁石滩盼望归帆，拿寄来的钱在杂货铺采买家用，侨批承载着一家人隔海的思念。</div>
-    <div class="opt-item" data-opt="1">B. 杂货铺店主出海经商，靠礁石记号捕鱼赚钱，写信给代书先生记账。</div>
-    <div class="opt-item" data-opt="2">C. 代书先生四处收集歌谣，记录闽南词语，编成册子。</div>`;
-    document.getElementById("mNav").innerHTML = `<button class="btn" id="closeM">暂时离开卷宗</button>`;
-    modal.classList.add("open");
-    document.querySelectorAll(".opt-item").forEach(el=>{
-        el.onclick = ()=>{
-            const sel = Number(el.dataset.opt);
-            if(sel === 0){
-                modal.classList.remove("open");
-                state.scene = 6;
-                renderScene();
-                renderSide();
-                renderProgress();
-                save();
-            }else{
-                state.wrongCount++;
-                let tip = "";
-                if(state.wrongCount ===1){
-                    tip = `你的推论暂时和线索对不上。
-想一想：侨批里的银钱是谁寄出去的，又是给谁使用的？`;
-                }else if(state.wrongCount ===2){
-                    tip = `再梳理一下线索碎片：
-✦ 线索1、2、7：侨批暗语、寄银、杂货铺采买
-✦ 线索3、4、6：母子二人等候消息的地点
-✦ 线索5、8：寄信人身在南洋，离别有不舍
-试着把“寄信人、钱款、等候的家人”串起来。`;
-                }else{
-                    tip = `💡重点提示：
-有一位身在南洋的番客，托人写信、用暗语寄钱养家；
-他的妻儿留在故土，常在龙眼林、礁石滩等候归讯，收到的钱用来在家中置办日用。
-看看选项里哪一条符合这个脉络。`;
-                }
-                document.getElementById("mBody").innerHTML = `<div class="tip-text">${tip.replace(/\n/g,"<br>")}</div>`;
-                document.getElementById("mNav").innerHTML = `<button class="btn" id="retryPaper">再试一次</button>`;
-                document.getElementById("retryPaper").onclick = openPaper;
-                save();
-            }
-        }
-    })
-    document.getElementById("closeM").onclick = ()=>modal.classList.remove("open");
-}
-function renderCert(){
-    const box = document.getElementById("sceneContent");
-    box.innerHTML = `
-    <div class="cert">
-        <h2>🏅 乡音探事 · 侨乡调查证</h2>
-        <div style="margin:12px 0">调查员：<input id="nameInput" value="${state.playerName}" placeholder="输入你的名字"></div>
-        <div class="cert-stamp">侨批研学<br>纪念章</div>
-        <div style="margin:16px 0;line-height:1.7">
-        调查结论：<br>
-        你成功串联全部线索，推理出番客阿发的故事：阿发远赴南洋趁食，以侨批为纽带，隔着大海牵挂家中妻儿；乡音藏在书信、暗语与等候的话语里，是唐山与番边之间的联结。
-        </div>
-        <div style="margin:12px 0;font-size:14px">习得闽南乡音词汇：<br>${certWordList.join("、")}</div>
-        <div style="margin:12px 0">✨ 成就解锁：识乡音，解侨批</div>
-        <div class="nav-row" style="justify-content:center">
-            <button class="btn" id="saveName">保存名字</button>
-            <button class="btn btn-secondary" id="restart">重新开始调查</button>
-        </div>
+    html += `</div></div>`;
+    app.innerHTML = html;
+  }else if(state.page==="cert"){
+    app.innerHTML = `
+    <div class="panel cert">
+      <h2>🏅 乡音探事 · 侨乡调查证</h2>
+      <div style="margin:14px 0">调查员：<input id="nameInput" value="${state.playerName}" placeholder="填写名字"></div>
+      <div class="cert-stamp">侨批研学<br>纪念章</div>
+      <p>你串联全部线索，读懂番客阿发的侨批故事。一纸侨批，承载跨越山海的思念。</p>
+      <p>✨成就解锁：识乡音，解侨批</p>
+      <div class="nav-row" style="justify-content:center">
+        <button class="btn" id="saveName">保存名字</button>
+        <button class="btn btn-secondary" id="resetAll">重新开始调查</button>
+      </div>
     </div>`;
     document.getElementById("saveName").onclick = ()=>{
-        state.playerName = document.getElementById("nameInput").value;
-        save();
-        alert("名字已保存，可以截图保存调查证！");
+      state.playerName = document.getElementById("nameInput").value;
+      save();alert("名字已保存");
     }
-    document.getElementById("restart").onclick = ()=>{
-        if(confirm("确定重置全部进度吗？")){
-            localStorage.removeItem(SAVE_KEY);
-            state.scene = 0;
-            state.clues = Array(8).fill(false);
-            state.wrongCount = 0;
-            renderScene();
-            renderSide();
-            renderProgress();
-        }
+    document.getElementById("resetAll").onclick = ()=>{
+      if(confirm("确定重置全部进度？")){
+        state.page="home";state.sceneIdx=0;state.clues=Array(8).fill(false);state.wrongCount=0;state.playerName="";save();render();
+      }
     }
+  }
 }
-// 侧边栏切换
-document.getElementById("openSide").onclick = ()=>document.getElementById("side").classList.toggle("open");
-document.querySelectorAll(".sidebar-tab button").forEach(btn=>{
-    btn.onclick = ()=>{
-        document.querySelectorAll(".sidebar-tab button").forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");
-        const t = btn.dataset.tab;
-        document.getElementById("tab-clue").style.display = t==="clue"?"block":"none";
-        document.getElementById("tab-word").style.display = t==="word"?"block":"none";
+function openQuiz(pid){
+  const allPts = scenes.flatMap(s=>s.points||[]);
+  const p = allPts.find(x=>x.idx===pid);
+  mTitle.innerText = p.q;
+  let optHtml = "";
+  p.opts.forEach((o,i)=>optHtml += `<div class="opt-item" data-ans="${i}">${o}</div>`);
+  mBody.innerHTML = optHtml;
+  mNav.innerHTML = `<button class="btn" id="closeQuiz">关闭</button>`;
+  openModal();
+  document.querySelectorAll(".opt-item").forEach(el=>{
+    el.onclick = ()=>{
+      const sel = +el.dataset.ans;
+      document.querySelectorAll(".opt-item").forEach(e=>e.classList.remove("correct","wrong"));
+      if(sel===p.ans){
+        el.classList.add("correct");
+        state.clues[pid]=true;save();
+        setTimeout(()=>{closeModal();render();},800);
+      }else{
+        el.classList.add("wrong");
+      }
     }
-})
-// 主入口
-load();
-if(state.scene ===6) renderCert();
-else renderScene();
-renderSide();
-renderProgress();
+  })
+  document.getElementById("closeQuiz").onclick = closeModal;
+}
+function openPaper(){
+  state.wrongCount=0;
+  mTitle.innerText = "卷宗｜推理提交";
+  mBody.innerHTML = `
+    <div class="tip-text">集齐全部线索，请选出这段故事的真相。</div>
+    <div class="opt-item" data-opt="0">A. 名叫阿发的番客远赴南洋趁食，不识字，请代书先生写侨批，用暗语寄银回家；妻子带着孩子在侨乡等候，在杂货店采买、龙眼林闲谈、礁石滩等船。</div>
+    <div class="opt-item" data-opt="1">B. 杂货店主出海捕鱼，靠礁石记号记录鱼群，请代书先生记账。</div>
+    <div class="opt-item" data-opt="2">C. 代书先生收集歌谣，记录闽南词语，整理成书。</div>
+  `;
+  mNav.innerHTML = `<button class="btn" id="closePaper">暂时离开卷宗</button>`;
+  openModal();
+  document.querySelectorAll(".opt-item").forEach(el=>{
+    el.onclick = ()=>{
+      const sel = +el.dataset.opt;
+      if(sel===0){
+        closeModal();state.page="cert";save();render();
+      }else{
+        state.wrongCount++;
+        let tip="";
+        if(state.wrongCount===1) tip="你的推论和线索对不上。想一想：侨批里的银钱是谁寄的、寄给谁？";
+        else if(state.wrongCount===2) tip="梳理线索：线索里有南洋谋生、寄钱、家中妻儿等候，试着把人物串起来。";
+        else tip="💡重点：南洋番客阿发托人写侨批寄钱，家人留在故乡等候。";
+        mBody.innerHTML = `<div class="tip-text">${tip}</div>`;
+      }
+      save();
+    }
+  })
+  document.getElementById("closePaper").onclick = closeModal;
+}
+// 导航按钮
+document.getElementById("btnShop").onclick = ()=>alert("商店模块开发中，敬请期待！");
+document.getElementById("btnWord").onclick = ()=>{state.page="word";save();render()};
+document.getElementById("btnStart").onclick = ()=>{
+  if(getClueCount()>0){
+    if(confirm("是否继续上次调查？取消则回到首页")){
+      state.page="scene";save();render();
+    }
+  }else{
+    state.page="scene";state.sceneIdx=0;save();render();
+  }
+};
+document.getElementById("btnPaper").onclick = ()=>{
+  if(getClueCount()>=8){openPaper()}else{alert(`当前线索：${getClueCount()}/8，线索不足，无法打开卷宗`)}
+};
+document.getElementById("btnUnlock").onclick = ()=>{state.page="unlock";save();render()};
+load();render();
 </script>
 </body>
 </html>
