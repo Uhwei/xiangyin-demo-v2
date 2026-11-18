@@ -46,6 +46,15 @@ body{
 .nav-btn.placeholder{
   background:#332b24;color:#92846c;
 }
+/* 右上角证件小按钮 */
+.cert-quick{
+  position:fixed;top:14px;right:16px;z-index:100;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(243,217,138,0.4);
+  background:rgba(30,22,18,0.85);
+  color:#f3d98a;display:grid;place-items:center;
+  cursor:pointer;font-size:20px;
+}
 /* ========== 首页样式 ========== */
 .home-page{
   min-height:calc(100vh - 100px);
@@ -55,6 +64,24 @@ body{
 .home-title{font-size:36px;color:#f3d98a;margin-bottom:12px;letter-spacing:4px}
 .home-slogan{font-size:18px;color:#d9c79c;margin-bottom:8px}
 .home-desc{max-width:620px;color:#b8a884;margin-top:24px;line-height:1.8}
+/* ========== 案件目录页 ========== */
+.case-dir{display:grid;grid-template-columns:1fr 220px;gap:20px;margin-top:20px}
+.case-list{display:flex;flex-direction:column;gap:14px}
+.case-item{
+  padding:18px;border:1px solid rgba(243,217,138,0.22);
+  border-radius:12px;background:rgba(44,32,24,0.55);
+  cursor:pointer;transition:0.25s;
+}
+.case-item:hover{background:rgba(60,44,32,0.65)}
+.case-item.locked{opacity:0.45;cursor:not-allowed}
+.case-title{color:#ffd98b;font-size:17px;margin-bottom:6px}
+.case-sub{color:#c9b890;font-size:14px}
+.side-col{display:flex;flex-direction:column;gap:12px}
+.side-btn{
+  padding:14px;border:1px dashed rgba(243,217,138,0.3);
+  border-radius:10px;background:rgba(44,32,24,0.45);
+  cursor:pointer;color:#e8d7a9;text-align:center;
+}
 /* ========== 通用面板 ========== */
 .panel{
   background:rgba(30,22,18,0.72);
@@ -66,27 +93,47 @@ body{
   font-size:20px;color:#f3d98a;margin-bottom:16px;
   padding-left:12px;border-left:4px solid #b8734a;
 }
-/* ========== 场景页面 ========== */
+/* ========== 场景页面｜对话样式 ========== */
 .scene{min-height:460px;position:relative}
 .scene-title{
   font-size:20px;color:#f3d98a;margin-bottom:14px;
   padding-left:12px;border-left:4px solid #b8734a;
 }
-.scene-desc{margin-bottom:22px;line-height:1.75;color:#e3d2a7}
-.point-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:22px}
-.point-item{
-  border:1px solid rgba(243,217,138,0.2);border-radius:12px;padding:14px;cursor:pointer;
-  background:rgba(60,42,30,0.45);transition:.25s;position:relative;overflow:hidden;
+.dialog-wrap{
+  margin-bottom:22px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
-.point-item::before{
-  content:"";position:absolute;left:0;top:0;width:4px;height:100%;
-  background:#b8734a;transform:scaleY(0);transform-origin:top;transition:.3s;
+.dialog-item{
+  padding:12px 14px;
+  border-radius:10px;
+  max-width:90%;
+  line-height:1.7;
 }
-.point-item:hover{background:rgba(80,56,40,0.55);transform:translateY(-2px)}
-.point-item:hover::before{transform:scaleY(1)}
-.point-item.locked{opacity:.55}
-.point-name{font-weight:bold;margin-bottom:6px;color:#ffd98b}
-.point-text{color:#d9c79c;font-size:14px}
+.dialog-a{
+  background:rgba(100,70,48,0.45);
+  align-self:flex-start;
+  border-left:3px solid #b8734a;
+}
+.dialog-b{
+  background:rgba(60,75,60,0.45);
+  align-self:flex-end;
+  border-right:3px solid #729974;
+  text-align:right;
+}
+.dialog-name{
+  color:#f3d98a;font-weight:bold;margin-bottom:4px;
+}
+.lan-word{
+  color:#ffd98b;cursor:pointer;text-decoration:underline dotted;
+}
+.opt-ask{
+  padding:11px;border:1px solid rgba(243,217,138,0.2);
+  border-radius:10px;margin:8px 0;cursor:pointer;
+  background:rgba(52,38,28,0.45);transition:0.2s;
+}
+.opt-ask:hover{background:rgba(70,50,36,0.55)}
 .nav-row{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
 .btn{
   padding:10px 18px;border:none;border-radius:10px;cursor:pointer;
@@ -100,7 +147,6 @@ body{
 .btn:disabled{background:#3a3029;color:#8a7a66;cursor:not-allowed;filter:none}
 .btn-secondary{background:linear-gradient(180deg,#3e5240,#253328)}
 .foot-tip{margin-top:10px;font-size:13px;color:#a89778}
-.help-btn{position:absolute;bottom:18px;right:18px}
 /* ========== 词库页面 ========== */
 .word-item{
   padding:12px;border-bottom:1px dashed rgba(243,217,138,0.12);
@@ -108,11 +154,15 @@ body{
 }
 .word-item.locked{color:#776b58}
 .word-title{color:#ffd98b;font-weight:bold}
-/* ========== 未解锁面板 ========== */
-.unlock-group{margin-bottom:18px}
-.unlock-group h4{color:#f3d98a;margin-bottom:8px}
-.unlock-item{padding:8px 0;color:#d9c79c}
-/* ========== 卷宗弹窗 ========== */
+/* ========== 商店页面 ========== */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px}
+.shop-card{
+  border:1px solid rgba(243,217,138,0.2);border-radius:10px;padding:14px;
+  background:rgba(44,32,24,0.45);
+}
+.shop-card h4{color:#ffd98b;margin-bottom:6px}
+.shop-cost{color:#d4b888;font-size:14px}
+/* ========== 弹窗｜考题、闽南词释义弹窗 ========== */
 .modal{
   position:fixed;inset:0;background:rgba(0,0,0,0.55);
   display:none;align-items:center;justify-content:center;z-index:100;
@@ -121,7 +171,7 @@ body{
 .modal-box{
   background:rgba(30,22,18,0.92);
   border:1px solid rgba(243,217,138,0.3);
-  border-radius:16px;width:92%;max-width:540px;padding:24px;
+  border-radius:16px;width:92%;max-width:580px;padding:24px;
   box-shadow:0 20px 50px rgba(0,0,0,0.55);
 }
 .modal-title{font-size:18px;color:#f3d98a;margin-bottom:14px}
@@ -142,6 +192,8 @@ body{
     linear-gradient(180deg,#3a2a1e,#241a14);
   box-shadow:0 18px 45px rgba(0,0,0,0.45);
 }
+.cert.stamp-1{border-color:#e2bc72}
+.cert.stamp-2{border-color:#c29650}
 .cert h2{color:#f3d98a;margin-bottom:14px}
 .cert-stamp{
   margin:18px auto;width:110px;height:110px;border:3px solid #f3d98a;
@@ -149,23 +201,27 @@ body{
   rotate:-12deg;font-size:14px;line-height:1.4;
   background:rgba(243,217,138,0.06);
 }
+.cert-stamp.s1{border-color:#e2bc72;color:#e2bc72}
+.cert-stamp.s2{border-color:#c29650;color:#c29650}
 .cert p{line-height:1.85;color:#efe3cf;margin:10px 0}
 input{
   padding:8px 12px;border-radius:8px;border:1px solid rgba(243,217,138,0.3);
   background:rgba(60,42,30,0.45);color:#efe3cf;outline:none;
 }
+.score-bar{display:flex;gap:24px;margin-bottom:12px;color:#e8d7a9}
 </style>
 </head>
 <body>
 <div class="nav-wrap">
   <div class="nav-inner">
-    <button class="nav-btn placeholder" id="btnShop">商店</button>
+    <button class="nav-btn" id="btnShop">商店</button>
     <button class="nav-btn" id="btnWord">词库</button>
     <button class="nav-btn main" id="btnStart">开始调查</button>
     <button class="nav-btn" id="btnPaper">卷宗</button>
-    <button class="nav-btn" id="btnUnlock">未解锁</button>
+    <button class="nav-btn placeholder" id="btnUnlock">未解锁</button>
   </div>
 </div>
+<div class="cert-quick" id="btnCert">📜</div>
 <div class="container" id="app"></div>
 
 <div class="modal" id="modal">
@@ -177,82 +233,104 @@ input{
 </div>
 
 <script>
-const SAVE_KEY = "xiangyin_save_v4";
+const SAVE_KEY = "xiangyin_save_v6";
 const state = {
   page:"home",
-  sceneIdx:0,
-  clues:Array(8).fill(false),
-  wrongCount:0,
-  tipCd:0,
-  playerName:""
+  //案件1：魔神仔传闻
+  case1:{scene:0,clues:Array(6).fill(false),wrongCount:0,done:false},
+  scoreCase:0,
+  scoreStudy:0,
+  certStamp:"default",
+  certBorder:"default",
+  certFont:"default",
+  ownedStamp:["default"],
+  ownedBorder:["default"],
+  ownedFont:["default"],
+  playerName:"",
+  sideStoryDone:[]
 };
-const scenes = [
+//第一章案件场景：0杂货店，1龙眼林，2礁石，3卷宗
+const case1Scenes = [
   {
-    title:"欢迎来到乡音探事",
-    desc:`这片海边侨乡，藏着一段番客的往事。\n所有线索都藏在场景之中，未解锁只会显示“？？？”。\n完成乡音小考题解锁线索，留心线索细节，它们彼此关联。\n探索顺序：杂货店 → 龙眼林 → 礁石滩 → 侨批代书摊\n集齐全部线索，前往卷宗提交推理。`,
-    points:[],
-    nav:[{txt:"出发探索",next:1}]
+    title:"第一章｜杂货店 · 后埕村",
+    dialog:[
+      {who:"旁白",txt:"后埕村杂货店，阿伯坐在柜台剥花生，收音机缓缓播放南音。你走上前打招呼。"},
+      {who:"阿伯",txt:"<span class='lan-word' data-w='2'>汝讲啥？</span>"},
+      {who:"阿伯",txt:"无啦，<span class='lan-word' data-w='3'>无代志</span>。"}
+    ],
+    asks:[
+      {txt:"阿伯，<span class='lan-word' data-w='4'>昨昏暗时</span>发生啥物代志？",correct:true,reply:"昨昏暗时，我咧关店，听着有人咧叫名。叫三声，第三声近近咧。我开门看，无半个人。",clueIdx:0},
+      {txt:"恁遮敢有<span class='lan-word' data-w='0'>魔神仔</span>？",correct:false,reply:"阿伯眉头一皱，闭口不再说话。"},
+      {txt:"这包薰偌济钱？",correct:false,reply:"阿伯随口报了价钱，和传闻无关。"}
+    ],
+    followUp:{
+      q:"是<span class='lan-word' data-w='6'>查埔声</span>抑是<span class='lan-word' data-w='7'>查某声</span>？",
+      reply:"查某声。老老的。",
+      clueIdx:1
+    },
+    nav:[{txt:"前往龙眼林",next:1}],
+    tip:"试着用当地的问话，才可以撬开阿伯的话匣子。"
   },
   {
-    title:"场景一｜杂货店",
-    desc:"老木柜台、粗陶罐、竹篮、油灯、抽屉，是侨眷托店主帮忙采买、代收侨批的地方。",
-    points:[
-      {idx:0,name:"陶罐",q:"陶罐外壁的刻痕，店主用来做什么？",opts:["登记侨眷托买的丝线、灯油等日用货品","标记陶罐烧制年份","祈福画符"],ans:0,clue:"陶罐刻痕：杂货店主用闽南俗字记账，登记一位妇人托买丝线、灯油，等侨批捎来银钱结账。",word:"生理｜seng-lí｜生意、买卖；旧时侨乡把营生叫生理"},
-      {idx:1,name:"柜台抽屉",q:"抽屉里的草稿，是侨批最常写的牵挂？",opts:["盼平安，银钱托船客捎回","明日出海，风浪难料","龙眼熟了，等你回来采摘"],ans:0,clue:"抽屉侨批草稿：一位南洋番客写下，盼家人平安，银钱托船客捎回，补贴家用。",word:"厝｜tshù｜家；寄银返厝 = 寄钱回家"}
+    title:"第一章｜龙眼林 · 后埕村",
+    dialog:[{who:"旁白",txt:"龙眼树下，阿弟蹲在地上玩石子，神色怕生。"}],
+    asks:[
+      {txt:"阿弟，<span class='lan-word' data-w='10'>汝敢有看着</span>人？",correct:true,reply:"有一个<span class='lan-word' data-w='8'>细细汉</span>的，<span class='lan-word' data-w='1'>暗时</span>伫<span class='lan-word' data-w='9'>树仔跤</span>。",clueIdx:2},
+      {txt:"你有没有看见鬼怪？",correct:false,reply:"阿弟害怕地摇摇头，不肯多说话。"}
     ],
-    nav:[{txt:"前往龙眼林",next:2}],
-    tip:"留意货架上的陶罐与抽屉"
+    followUp:{
+      q:"伊<span class='lan-word' data-w='11'>敢会</span>讲话？",
+      reply:"无讲话，<span class='lan-word' data-w='12'>干焦</span>狗仔<span class='lan-word' data-w='13'>缀</span>伊行。",
+      clueIdx:3
+    },
+    nav:[{txt:"前往礁石",next:2}],
+    tip:"先获取杂货店叫名口述，礁石才可以交互。"
   },
   {
-    title:"场景二｜龙眼林",
-    desc:"成片老龙眼树、石凳、落叶小路，是侨眷等候船客、打听南洋亲人消息的地方。",
-    points:[
-      {idx:2,name:"老龙眼树根",q:"闽南短句「阿母，我会好好趁食」是谁在这里相传？",opts:["等候亲人的乡人互相传递平安消息","商人谈生意","孩童童谣"],ans:0,clue:"龙眼树下常有妇人带着孩子久坐，船客上岸后转述南洋番客捎回的平安话。",word:"趁食｜thàn-tsia̍h｜谋生、赚钱；趁食就是出外打拼"}
+    title:"第一章｜礁石 · 后埕村",
+    dialog:[{who:"旁白",txt:"夜里海风呼啸，礁石上一盏孤灯摇曳，一位阿嬷背对着你。需要使用合适的闽南话语才可以搭话。"}],
+    asks:[
+      {txt:"阿嬷，<span class='lan-word' data-w='1'>暗时</span>风大。",correct:true,reply:"<div>「<span class='lan-word' data-w='14'>阿明啊——<span class='lan-word' data-w='15'>转来</span>食饭喔——</span>」<br>「<span class='lan-word' data-w='16'>三冬</span>矣。我叫三冬矣，伊犹原无应。」<br>「日时<span class='lan-word' data-w='17'>袂使</span>叫，人会议论。」</div>",clueIdx:4},
+      {txt:"这里是不是有魔神仔？",correct:false,reply:"阿嬷充耳不闻，不理睬你。"}
     ],
-    nav:[{txt:"前往礁石滩",next:3}],
-    tip:"多留意老树根旁的闲谈"
+    followUp:{q:"为何夜里在此呼喊？",reply:"灯照着，伊较看会着路。",clueIdx:5},
+    nav:[{txt:"打开卷宗汇报",next:3}],
+    tip:"听阿嬷的独白，拼凑整件传闻真相。"
   },
   {
-    title:"场景三｜礁石滩",
-    desc:"海浪、黑礁石、旧渔网、贝壳、石码头，红头船从这里出发，也在这里靠岸。",
-    points:[
-      {idx:3,name:"礁石刻痕",q:"礁石浅浅刻下记号，渔民用来记录？",opts:["潮汐起落，预估归船时间","鱼群位置","游客标记"],ans:0,clue:"渔民在礁石刻痕记录潮汐，潮水合适红头船才能靠岸，家人在此等候归人。",word:"潮｜tiô｜潮水；看潮候，等船归"},
-      {idx:4,name:"旧渔网",q:"渔网中半张侨批封，番客大多去往何处趁食？",opts:["南洋（番边）","福州","泉州城内"],ans:0,clue:"侨批寄回唐山故土，寄信人在南洋番边谋生，搭乘红头船跨海传信。",word:"番边｜huan-pinn｜南洋；过番，动身去南洋打拼"}
-    ],
-    nav:[{txt:"前往侨批代书摊",next:4}],
-    tip:"礁石、渔网藏着线索"
-  },
-  {
-    title:"场景四｜侨批代书摊",
-    desc:"木摊、毛笔、信笺、信封、算盘；很多番客不识字，请代书先生写侨批，还用暗语记汇款。",
-    points:[
-      {idx:5,name:"代书先生的信笺",q:"闽南话「囝仔」是什么意思？",opts:["孩子、儿女","稻米","小船"],ans:0,clue:"代书先生常帮南洋番客写信，叮嘱家人照料囝仔，送囝仔读书。",word:"囝仔｜kiáⁿ-á｜小孩；读册就是读书"},
-      {idx:6,name:"算盘旁暗语字条",q:"字条写「杉兄」，杉=3，兄=百，代表多少钱？",opts:["三百","三十","三千"],ans:0,clue:"番客和代书先生约定暗语，杉兄代表三百银，外人看不懂，同乡才明白。",word:"糖仔｜thn̂g-á｜侨批暗语代指钱款；写糖仔就是寄钱"},
-      {idx:7,name:"摊边歌谣纸片",q:"歌谣「一溪目汁一船人」里的目汁是？",opts:["眼泪","海水","米酒"],ans:0,clue:"阿发当年登船下南洋，妻儿在岸边流泪，侨批承载山海思念。",word:"目汁｜ba̍k-tsi｜眼泪；闽南很有画面感的词"}
-    ],
-    nav:[{txt:"查看卷宗",next:"paper"}],
-    tip:"信笺、算盘、歌谣纸片都可以细看"
+    title:"第一章｜卷宗汇报 · 后埕村案件",
+    dialog:[],asks:[],nav:[],tip:"整理全部线索，选择关键词与结案结论提交审核。"
   }
 ];
-const wordList = [
-  {idx:0,text:"生理｜seng-lí｜生意、买卖；旧时侨乡把营生叫生理"},
-  {idx:1,text:"厝｜tshù｜家；寄银返厝 = 寄钱回家"},
-  {idx:2,text:"趁食｜thàn-tsia̍h｜谋生、赚钱；趁食就是出外打拼"},
-  {idx:3,text:"潮｜tiô｜潮水；看潮候，等船归"},
-  {idx:4,text:"番边｜huan-pinn｜南洋；过番，动身去南洋打拼"},
-  {idx:5,text:"囝仔｜kiáⁿ-á｜小孩；读册就是读书"},
-  {idx:6,text:"糖仔｜thn̂g-á｜侨批暗语代指钱款；写糖仔就是寄钱"},
-  {idx:7,text:"目汁｜ba̍k-tsi｜眼泪；闽南很有画面感的词"}
+//本案12词
+const case1WordList = [
+  {idx:0,text:"魔神仔｜môo‑sîn‑á｜传说矮小精怪"},
+  {idx:1,text:"暗时｜àm‑sî｜夜里"},
+  {idx:2,text:"汝讲啥｜lú kóng siánn｜你说什么"},
+  {idx:3,text:"无代志｜bô tāi‑tsì｜没事啦"},
+  {idx:4,text:"昨昏暗时｜tsa‑hng àm‑sî｜昨天夜里"},
+  {idx:5,text:"叫名｜kiò‑miâ｜喊名字"},
+  {idx:6,text:"查埔声｜tsa‑poo‑siann｜男声"},
+  {idx:7,text:"查某声｜tsa‑bóo‑siann｜女声"},
+  {idx:8,text:"细细汉｜sè‑sè‑hàn｜个子矮小"},
+  {idx:9,text:"树仔跤｜tshiū‑á‑kha｜树下"},
+  {idx:10,text:"汝敢有看着｜lú kánn ū khuànn‑tio̍h｜你是否看见"},
+  {idx:11,text:"伊敢会｜i kánn ē｜他会不会"},
+  {idx:12,text:"干焦｜kan‑ta｜仅仅、只"},
+  {idx:13,text:"缀｜tuè｜跟、跟随"},
+  {idx:14,text:"阿明｜A‑bîng｜人名阿明"},
+  {idx:15,text:"转来｜tńg‑lâi｜回来"},
+  {idx:16,text:"三冬｜sann‑tang｜三年"},
+  {idx:17,text:"袂使｜bē‑sái｜不可以"}
 ];
-const unlockMeta = [
-  {type:"clue",idx:0,desc:"陶罐刻痕线索｜杂货店"},
-  {type:"clue",idx:1,desc:"侨批草稿线索｜杂货店"},
-  {type:"clue",idx:2,desc:"龙眼树下平安话｜龙眼林"},
-  {type:"clue",idx:3,desc:"礁石刻痕潮汐记录｜礁石滩"},
-  {type:"clue",idx:4,desc:"旧渔网侨批封｜礁石滩"},
-  {type:"clue",idx:5,desc:"囝仔信笺｜代书摊"},
-  {type:"clue",idx:6,desc:"杉兄暗语｜代书摊"},
-  {type:"clue",idx:7,desc:"目汁歌谣｜代书摊"},
+//卷宗11关键词
+const paperKeywords = ["阿伯","三声","查某声","阿弟","细细汉","狗仔","礁石","阿嬷","阿明","三冬","魔神仔无影"];
+//商店商品定义
+const shopItems = [
+  {id:"stamp1",type:"stamp",name:"渔火纪念印章",costCase:20,costStudy:10},
+  {id:"stamp2",type:"stamp",name:"红头船印章",costCase:30,costStudy:15},
+  {id:"border1",type:"border",name:"旧侨批边框",costCase:25,costStudy:12},
+  {id:"font1",type:"font",name:"手写落款字体",costCase:15,costStudy:20}
 ];
 const modalEl = document.getElementById("modal");
 const mTitle = document.getElementById("mTitle");
@@ -264,176 +342,233 @@ function load(){
   const raw = localStorage.getItem(SAVE_KEY);
   if(raw) Object.assign(state,JSON.parse(raw));
 }
-function getClueCount(){return state.clues.filter(x=>x).length}
 function openModal(){modalEl.classList.add("open")}
 function closeModal(){modalEl.classList.remove("open")}
 function render(){
-  const cnt = getClueCount();
   app.innerHTML = "";
   if(state.page==="home"){
     app.innerHTML = `
       <div class="home-page">
         <div class="home-title">乡音探事</div>
         <div class="home-slogan">一纸侨批，山海乡音</div>
-        <div class="home-desc">闽南侨乡研学解谜小游戏，跟随侨批，探寻番客下南洋的往事。收集线索，解锁词汇，完成卷宗推理。</div>
+        <div class="home-desc">闽南侨乡研学探案游戏。调查乡间传闻，学习闽南乡音，完成稽查委托。</div>
       </div>
     `;
-  }else if(state.page==="scene"){
-    const s = scenes[state.sceneIdx];
-    let html = `<div class="panel scene"><div class="scene-title">${s.title}</div><div class="scene-desc">${s.desc.replace(/\n/g,"<br>")}</div>`;
-    if(s.points.length>0){
-      html += `<div class="point-list">`;
-      s.points.forEach(p=>{
-        const lock = state.clues[p.idx];
-        html += `
-          <div class="point-item ${lock?'locked':''}" data-pidx="${p.idx}">
-            <div class="point-name">${p.name} ${lock?"✅已解锁":"✨可探索"}</div>
-            <div class="point-text">${lock?"这条线索已经解锁。":"点击开启考题"}</div>
+  }else if(state.page==="casedir"){
+    app.innerHTML = `
+    <div class="panel">
+      <div class="panel-title">案件目录</div>
+      <div class="score-bar">
+        <div>办案积分：${state.scoreCase}</div>
+        <div>研学积分：${state.scoreStudy}</div>
+      </div>
+      <div class="case-dir">
+        <div class="case-list">
+          <div class="case-item" id="openCase1">
+            <div class="case-title">第一章 · 魔神仔传闻</div>
+            <div class="case-sub">后埕村：杂货店｜龙眼林｜礁石｜卷宗汇报 ${state.case1.done?"✅已结案":"🟡未结案"}</div>
           </div>
-        `;
-      });
+          <div class="case-item locked">
+            <div class="case-title">第二章 · （待开放）</div>
+            <div class="case-sub">全新独立案件，后续更新</div>
+          </div>
+        </div>
+        <div class="side-col">
+          <div class="side-btn" id="openSide">📖 支线小故事</div>
+        </div>
+      </div>
+    </div>`;
+    app.querySelector("#openCase1").onclick = ()=>{
+      state.page="case1";state.case1.scene=0;save();render();
+    };
+    app.querySelector("#openSide").onclick = ()=>{
+      alert("支线小故事模块开发中。");
+    }
+  }else if(state.page==="case1"){
+    const s = case1Scenes[state.case1.scene];
+    let html = `<div class="panel scene"><div class="scene-title">${s.title}</div>`;
+    html += `<div class="dialog-wrap">`;
+    s.dialog.forEach(d=>{
+      const cls = d.who==="你"?"dialog-b":"dialog-a";
+      html += `<div class="dialog-item ${cls}"><div class="dialog-name">${d.who}</div><div>${d.txt}</div></div>`;
+    })
+    html += `</div>`;
+    if(s.asks && s.asks.length>0){
+      html += `<div><h4 style="color:#f3d98a;margin:8px 0">选择你的问话</h4>`;
+      s.asks.forEach((ak,idx)=>{
+        html += `<div class="opt-ask" data-ask="${idx}">${ak.txt}</div>`
+      })
       html += `</div>`;
     }
     html += `<div class="nav-row">`;
-    s.nav.forEach(n=>{
-      if(n.next==="paper"){
-        html += `<button class="btn" ${cnt>=8?"":"disabled"} data-next="paper">${n.txt}</button>`;
-      }else{
-        html += `<button class="btn" data-next="${n.next}">${n.txt}</button>`;
-      }
-    });
+    if(s.nav){
+      s.nav.forEach(n=>{
+        if(n.next===3){
+          const ok = state.case1.clues.filter(x=>x).length>=6;
+          html += `<button class="btn" ${ok?"":"disabled"} data-next="${n.next}">${n.txt}</button>`;
+        }else{
+          html += `<button class="btn" data-next="${n.next}">${n.txt}</button>`;
+        }
+      })
+    }
+    html += `<button class="btn btn-secondary" id="backDir">返回案件目录</button>`;
     html += `</div>`;
     if(s.tip) html += `<div class="foot-tip">💡提示：${s.tip}</div>`;
     html += `</div>`;
     app.innerHTML = html;
-    app.querySelectorAll(".point-item").forEach(el=>{
-      el.onclick = ()=>{
-        const pid = +el.dataset.pidx;
-        if(state.clues[pid]) return;
-        openQuiz(pid);
+    //闽南词点击 +1研学积分
+    document.querySelectorAll(".lan-word").forEach(el=>{
+      el.onclick = (e)=>{
+        e.stopPropagation();
+        const wid = Number(el.dataset.w);
+        const w = case1WordList[wid];
+        state.scoreStudy+=1;save();
+        mTitle.innerText="闽南词释义";
+        mBody.innerHTML=`<div class="tip-text">${w.text}</div>`;
+        mNav.innerHTML=`<button class="btn" id="closeLan">关闭</button>`;
+        openModal();
+        document.getElementById("closeLan").onclick=closeModal;
+        render();
       }
-    });
-    app.querySelectorAll(".btn[data-next]").forEach(el=>{
-      el.onclick = ()=>{
-        const v = el.dataset.next;
-        if(v==="paper"){
-          if(cnt>=8){openPaper()}else alert("线索不足，暂时无法打开卷宗");
-        }else{
-          state.page="scene";state.sceneIdx=+v;save();render();
+    })
+    //问话点击
+    document.querySelectorAll(".opt-ask").forEach(el=>{
+      el.onclick=()=>{
+        const aidx=Number(el.dataset.ask);
+        const ak = s.asks[aidx];
+        mTitle.innerText:"对话反馈";
+        mBody.innerHTML=`<div class="tip-text">${ak.reply}</div>`;
+        mNav.innerHTML=`<button class="btn" id="closeAsk">确定</button>`;
+        openModal();
+        document.getElementById("closeAsk").onclick=()=>{
+          closeModal();
+          if(ak.correct && ak.clueIdx!==undefined && !state.case1.clues[ak.clueIdx]){
+            state.case1.clues[ak.clueIdx]=true;
+            state.scoreCase +=3;
+            save();render();
+          }
         }
       }
     })
+    document.querySelectorAll("[data-next]").forEach(el=>{
+      el.onclick=()=>{
+        const v=Number(el.dataset.next);
+        if(v===3){openPaperCase1()}else{state.case1.scene=v;save();render();}
+      }
+    })
+    document.getElementById("backDir").onclick=()=>{state.page="casedir";save();render();}
   }else if(state.page==="word"){
-    let html = `<div class="panel"><div class="panel-title">词库</div>`;
-    wordList.forEach(w=>{
-      const ok = state.clues[w.idx];
-      html += `<div class="word-item ${ok?"":"locked"}">`;
-      if(ok){html += `<div class="word-title">${w.text}</div>`;}else{html += `<div>？？？尚未解锁</div>`}
-      html += `</div>`;
+    let html = `<div class="panel"><div class="panel-title">词库｜闽南乡音</div>`;
+    case1WordList.forEach(w=>{
+      html += `<div class="word-item"><div class="word-title">${w.text}</div></div>`;
     })
     html += `</div>`;
     app.innerHTML = html;
-  }else if(state.page==="unlock"){
-    let html = `<div class="panel"><div class="panel-title">未解锁清单</div>`;
-    html += `<div class="unlock-group"><h4>未解锁线索</h4>`;
-    unlockMeta.forEach(u=>{
-      if(!state.clues[u.idx]) html += `<div class="unlock-item">• ${u.desc}</div>`
+  }else if(state.page==="shop"){
+    let html = `<div class="panel">
+      <div class="panel-title">商店｜证件装扮兑换</div>
+      <div class="score-bar"><div>办案积分：${state.scoreCase}</div><div>研学积分：${state.scoreStudy}</div></div>
+      <div class="shop-grid">`;
+    shopItems.forEach(it=>{
+      const owned = (it.type==="stamp"?state.ownedStamp:it.type==="border"?state.ownedBorder:state.ownedFont).includes(it.id);
+      html += `<div class="shop-card">
+        <h4>${it.name}</h4>
+        <div class="shop-cost">办案积分${it.costCase} / 研学积分${it.costStudy}</div>
+        ${owned?"<div style='color:#89d989'>✅已拥有</div>":`<button class="btn buy-btn" data-id="${it.id}">兑换</button>`}
+      </div>`;
     })
     html += `</div></div>`;
     app.innerHTML = html;
-  }else if(state.page==="cert"){
+    document.querySelectorAll(".buy-btn").forEach(el=>{
+      el.onclick=()=>{
+        const it = shopItems.find(x=>x.id===el.dataset.id);
+        if(state.scoreCase>=it.costCase || state.scoreStudy>=it.costStudy){
+          if(state.scoreCase>=it.costCase) state.scoreCase -= it.costCase;
+          else state.scoreStudy -= it.costStudy;
+          if(it.type==="stamp") state.ownedStamp.push(it.id);
+          if(it.type==="border") state.ownedBorder.push(it.id);
+          if(it.type==="font") state.ownedFont.push(it.id);
+          save();render();alert("兑换成功，可在稽查员证切换样式");
+        }else{alert("积分不足");}
+      }
+    })
+  }else if(state.page==="certview"){
+    let clsExtra = "";
+    if(state.certStamp==="stamp1") clsExtra+=" stamp-1";
+    if(state.certStamp==="stamp2") clsExtra+=" stamp-2";
     app.innerHTML = `
-    <div class="panel cert">
-      <h2>🏅 乡音探事 · 侨乡调查证</h2>
-      <div style="margin:14px 0">调查员：<input id="nameInput" value="${state.playerName}" placeholder="填写名字"></div>
-      <div class="cert-stamp">侨批研学<br>纪念章</div>
-      <p>你串联全部线索，读懂番客阿发的侨批故事。一纸侨批，承载跨越山海的思念。</p>
-      <p>✨成就解锁：识乡音，解侨批</p>
+    <div class="panel cert${clsExtra}">
+      <h2>🏅 乡音探事 · 见习稽查员证</h2>
+      <div style="margin:14px 0">稽查员：<input id="nameInput" value="${state.playerName}" placeholder="填写名字"></div>
+      <div class="cert-stamp ${state.certStamp}">南音馆<br>稽查组</div>
+      <p>完成案件调查，研习闽南乡音。</p>
       <div class="nav-row" style="justify-content:center">
-        <button class="btn" id="saveName">保存名字</button>
-        <button class="btn btn-secondary" id="resetAll">重新开始调查</button>
+        <button class="btn" id="saveCertName">保存名字</button>
+        <button class="btn btn-secondary" id="closeCertView">关闭</button>
       </div>
     </div>`;
-    document.getElementById("saveName").onclick = ()=>{
-      state.playerName = document.getElementById("nameInput").value;
-      save();alert("名字已保存");
+    document.getElementById("saveCertName").onclick=()=>{
+      state.playerName = document.getElementById("nameInput").value;save();alert("已保存");
     }
-    document.getElementById("resetAll").onclick = ()=>{
-      if(confirm("确定重置全部进度？")){
-        state.page="home";state.sceneIdx=0;state.clues=Array(8).fill(false);state.wrongCount=0;state.playerName="";save();render();
-      }
-    }
+    document.getElementById("closeCertView").onclick=()=>{state.page="home";save();render();}
   }
 }
-function openQuiz(pid){
-  const allPts = scenes.flatMap(s=>s.points||[]);
-  const p = allPts.find(x=>x.idx===pid);
-  mTitle.innerText = p.q;
-  let optHtml = "";
-  p.opts.forEach((o,i)=>optHtml += `<div class="opt-item" data-ans="${i}">${o}</div>`);
-  mBody.innerHTML = optHtml;
-  mNav.innerHTML = `<button class="btn" id="closeQuiz">关闭</button>`;
+function openPaperCase1(){
+  state.case1.wrongCount = 0;
+  mTitle.innerText="第一章｜卷宗汇报";
+  let kwHtml = "";
+  paperKeywords.forEach((kw,i)=>{
+    kwHtml += `<div class="opt-item" data-kw="${i}">☐ ${kw}</div>`;
+  })
+  mBody.innerHTML = `<div class="tip-text">勾选收集到的关键词。规则：>=9个且包含「魔神仔无影」为地道；第3次及以后重试阈值降到6。<br>选择结案结语：</div>
+  ${kwHtml}
+  <div class="opt-item" data-conc="0">地道：魔神仔是无影的</div>
+  <div class="opt-item" data-conc="1">通过：魔神仔是假的</div>
+  <div class="opt-item" data-conc="2">无加分：没有魔神仔</div>`;
+  mNav.innerHTML = `<button class="btn" id="submitPaper1">提交卷宗</button><button class="btn btn-secondary" id="closePaper1">取消</button>`;
   openModal();
-  document.querySelectorAll(".opt-item").forEach(el=>{
-    el.onclick = ()=>{
-      const sel = +el.dataset.ans;
-      document.querySelectorAll(".opt-item").forEach(e=>e.classList.remove("correct","wrong"));
-      if(sel===p.ans){
-        el.classList.add("correct");
-        state.clues[pid]=true;save();
-        setTimeout(()=>{closeModal();render();},800);
-      }else{
-        el.classList.add("wrong");
-      }
+  let selKw = new Set();
+  let selConc = null;
+  document.querySelectorAll("[data-kw]").forEach(el=>{
+    el.onclick=()=>{
+      const k = Number(el.dataset.kw);
+      if(selKw.has(k)){selKw.delete(k);el.innerText="☐ "+paperKeywords[k];}
+      else {selKw.add(k);el.innerText="☑ "+paperKeywords[k];}
     }
   })
-  document.getElementById("closeQuiz").onclick = closeModal;
-}
-function openPaper(){
-  state.wrongCount=0;
-  mTitle.innerText = "卷宗｜推理提交";
-  mBody.innerHTML = `
-    <div class="tip-text">集齐全部线索，请选出这段故事的真相。</div>
-    <div class="opt-item" data-opt="0">A. 名叫阿发的番客远赴南洋趁食，不识字，请代书先生写侨批，用暗语寄银回家；妻子带着孩子在侨乡等候，在杂货店采买、龙眼林闲谈、礁石滩等船。</div>
-    <div class="opt-item" data-opt="1">B. 杂货店主出海捕鱼，靠礁石记号记录鱼群，请代书先生记账。</div>
-    <div class="opt-item" data-opt="2">C. 代书先生收集歌谣，记录闽南词语，整理成书。</div>
-  `;
-  mNav.innerHTML = `<button class="btn" id="closePaper">暂时离开卷宗</button>`;
-  openModal();
-  document.querySelectorAll(".opt-item").forEach(el=>{
-    el.onclick = ()=>{
-      const sel = +el.dataset.opt;
-      if(sel===0){
-        closeModal();state.page="cert";save();render();
-      }else{
-        state.wrongCount++;
-        let tip="";
-        if(state.wrongCount===1) tip="你的推论和线索对不上。想一想：侨批里的银钱是谁寄的、寄给谁？";
-        else if(state.wrongCount===2) tip="梳理线索：线索里有南洋谋生、寄钱、家中妻儿等候，试着把人物串起来。";
-        else tip="💡重点：南洋番客阿发托人写侨批寄钱，家人留在故乡等候。";
-        mBody.innerHTML = `<div class="tip-text">${tip}</div>`;
-      }
-      save();
-    }
+  document.querySelectorAll("[data-conc]").forEach(el=>{
+    el.onclick=()=>{selConc=Number(el.dataset.conc);document.querySelectorAll("[data-conc]").forEach(e=>e.style.background="");el.style.background="rgba(184,115,74,0.3)";}
   })
-  document.getElementById("closePaper").onclick = closeModal;
-}
-// 导航按钮
-document.getElementById("btnShop").onclick = ()=>alert("商店模块开发中，敬请期待！");
-document.getElementById("btnWord").onclick = ()=>{state.page="word";save();render()};
-document.getElementById("btnStart").onclick = ()=>{
-  if(getClueCount()>0){
-    if(confirm("是否继续上次调查？取消则回到首页")){
-      state.page="scene";save();render();
+  document.getElementById("submitPaper1").onclick=()=>{
+    if(selConc===null){alert("请选择结案结语");return;}
+    state.case1.wrongCount++;
+    const hit = selKw.size;
+    const hasCore = selKw.has(paperKeywords.indexOf("魔神仔无影"));
+    const thresh = state.case1.wrongCount>=3 ?6:9;
+    if(hit>=thresh && hasCore){
+      state.case1.done=true;
+      state.scoreCase +=40;
+      closeModal();alert("✅卷宗审核通过，案件结案，获得见习稽查员证。办案积分+40");
+      state.page="certview";save();render();
+    }else{
+      let tip="";
+      if(state.case1.wrongCount===1){tip:"推论不足。需要命中足够关键词，并且必须包含「魔神仔无影」。";}
+      else if(state.case1.wrongCount===2){tip:"回顾线索：阿伯的叫声、阿弟看到的黑影、礁石阿嬷的独白。";}
+      else{tip:"💡放宽阈值至6个关键词，依旧必须包含「魔神仔无影」。"}
+      mBody.innerHTML=`<div class="tip-text">${tip}</div>`;
     }
-  }else{
-    state.page="scene";state.sceneIdx=0;save();render();
+    save();
   }
-};
-document.getElementById("btnPaper").onclick = ()=>{
-  if(getClueCount()>=8){openPaper()}else{alert(`当前线索：${getClueCount()}/8，线索不足，无法打开卷宗`)}
-};
-document.getElementById("btnUnlock").onclick = ()=>{state.page="unlock";save();render()};
+  document.getElementById("closePaper1").onclick=closeModal;
+}
+//导航按钮
+document.getElementById("btnShop").onclick=()=>{state.page="shop";save();render();};
+document.getElementById("btnWord").onclick=()=>{state.page="word";save();render();};
+document.getElementById("btnStart").onclick=()=>{state.page="casedir";save();render();};
+document.getElementById("btnPaper").onclick=()=>alert("卷宗请进入对应案件内部打开。");
+document.getElementById("btnUnlock").onclick=()=>alert("未解锁功能开发中。");
+document.getElementById("btnCert").onclick=()=>{state.page="certview";save();render();};
+
 load();render();
 </script>
 </body>
