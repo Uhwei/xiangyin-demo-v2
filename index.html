@@ -202,7 +202,8 @@ body{background:#1b1410;color:#efe3cf;overflow-x:hidden;
 .scard .cost{color:#c9b890;font-size:13px;margin-bottom:10px;line-height:1.8}
 .owned{color:#a9d6a4;font-size:13px}
 /* 卷宗 */
-.kwgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:12px 0}
+.kwgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:12px 0}
+@media(max-width:820px){.kwgrid{grid-template-columns:repeat(3,1fr);gap:7px}}
 .kw{padding:9px 12px;border:1px solid rgba(243,217,138,.18);border-radius:9px;font-size:14px;
   background:rgba(60,42,30,.4);cursor:pointer;user-select:none}
 .kw.on{background:rgba(184,115,74,.35);border-color:#f3d98a;color:#ffe7b0}
@@ -348,7 +349,12 @@ const CLUES={
  k5:{t:"礁石上的阿嬷在喊「阿明，转来食饭」，喊了三冬",place:"礁石"},
  k6:{t:"日时袂使叫，人会议论；举灯是怕伊看无路",place:"礁石"}
 };
-const KWS=["阿伯","三声","查某声","阿弟","细细汉","狗仔","礁石","阿嬷","阿明","三冬","魔神仔无影"];
+const KWS=["阿伯","三声","查某声","阿弟","细细汉","狗仔","阿嬷","魔神仔无影"];
+const KWR=["红衣女鬼","山神","水鬼","鬼火","魔神仔咬人","阿明已经死了","魔神仔有影"];
+const KWALL=[...KWS,...KWR];
+const KW_NEED=7;   // 至少命中几条（正确处理 ≥7）
+const KW_MAX=10;   // 最多能勾几条
+const KW_CONFLICT=[["魔神仔无影","魔神仔有影"]];
 
 const SCENES=[
  {n:1,title:"第一章 · 一｜后埕杂货店",place:"杂货店",
@@ -676,6 +682,7 @@ function dir(){
 }
 
 function bubble(n){
+  if(!n||(!n.t&&n.k!=="q"))return "";
   const gl=n.m?`<div class="gl">（${n.m}）</div>`:"";
   if(n.k==="n")return `<div class="bub narr">${n.t}${gl}</div>`;
   const c=n.who==="你"?"b":"a";
@@ -709,7 +716,7 @@ function scene(){
 
   const qIndex=sc.flow.slice(0,i).filter(x=>x.k==="q").length;
   let html=`<div class="panel"><div class="ptitle">${sc.title}</div><div class="dlg">`;
-  for(let j=0;j<i;j++)if(sc.flow[j].k!=="c")html+=bubble(sc.flow[j]);
+  for(let j=0;j<i;j++)if(sc.flow[j].k==="n"||sc.flow[j].k==="s")html+=bubble(sc.flow[j]);
   const cur=sc.flow[i];
 
   if(!cur){
@@ -837,25 +844,37 @@ function paperPage(){
   app.innerHTML=`<div class="panel"><div class="ptitle">卷宗汇报｜后埕一案</div>
     <div class="cluebox" style="margin:0 0 16px"><h4>已掌握线索</h4>
       ${Object.keys(CLUES).map(k=>`<div class="cl">${CLUES[k].t}<span style="color:#6f6454">　（${CLUES[k].place}）</span></div>`).join("")}</div>
-    <div class="ask">一、勾出要写进汇报的关键词（命中 ≥9 条，且必须含「魔神仔无影」）</div>
-    <div class="kwgrid">${KWS.map(k=>`<div class="kw ${S.picked[k]?'on':''}" data-k="${k}">${S.picked[k]?'☑':'☐'} ${k}</div>`).join("")}</div>
+    <div class="ask">一、勾出要写进汇报的关键词（正确命中 ≥${KW_NEED} 条，必须含「魔神仔无影」；最多勾 ${KW_MAX} 个）</div>
+    <div class="kwgrid">${KWALL.map(k=>{
+      const opp=KW_CONFLICT.find(p=>p.includes(k))?.find(x=>x!==k);
+      const off=opp&&S.picked[opp];
+      return `<div class="kw ${S.picked[k]?'on':''} ${off?'off':''}" data-k="${k}">${S.picked[k]?'☑':(off?'✕':'☐')} ${k}</div>`;
+    }).join("")}</div>
+    <div class="foot" style="margin:8px 0 0">已勾 ${KWALL.filter(k=>S.picked[k]).length}/${KW_MAX} 个</div>
     <div class="ask">二、结尾那一句，选哪种说法？</div>
-    <label class="radio ${S.ending==='A'?'on':''}" data-e="A">魔神仔是无影的。（地道）</label>
-    <label class="radio ${S.ending==='B'?'on':''}" data-e="B">魔神仔是假的。（通过，但降一档）</label>
-    <label class="radio ${S.ending==='C'?'on':''}" data-e="C">没有魔神仔。（通过，不加分）</label>
+    <label class="radio ${S.ending==='A'?'on':''}" data-e="A">魔神仔是无影的。</label>
+    <label class="radio ${S.ending==='B'?'on':''}" data-e="B">魔神仔是假的。</label>
+    <label class="radio ${S.ending==='C'?'on':''}" data-e="C">没有魔神仔。</label>
     ${S.paperMsg?`<div class="cluebox" style="border-color:rgba(239,108,108,.45)"><div class="cl" style="color:#ffcfcf">${S.paperMsg}</div></div>`:""}
     <div class="navrow"><button class="btn" id="submit">提交审核</button>
       <button class="btn line" id="toDir">回案件目录</button></div>
     <div class="foot">重录不限次数。第三次仍未达标，会给逐句批注。</div></div>`;
   document.querySelectorAll("[data-k]").forEach(el=>el.onclick=()=>{
-    const k=el.dataset.k;S.picked[k]=!S.picked[k];save();paperPage();
+    const k=el.dataset.k;
+    if(S.picked[k]){S.picked[k]=false;save();paperPage();return;}
+    const pair=KW_CONFLICT.find(p=>p.includes(k));
+    if(pair){const opp=pair.find(x=>x!==k);if(S.picked[opp])return toast(`「${k}」与「${opp}」互相矛盾，只能选一个`);}
+    if(KWALL.filter(x=>S.picked[x]).length>=KW_MAX){return toast(`最多勾 ${KW_MAX} 个，先取消一个`);}
+    S.picked[k]=true;save();paperPage();
   });
   document.querySelectorAll("[data-e]").forEach(el=>el.onclick=()=>{S.ending=el.dataset.e;save();paperPage();});
   document.getElementById("toDir").onclick=()=>go("dir");
   document.getElementById("submit").onclick=()=>{
     if(!S.ending)return toast("先选结尾那一句");
+    const bad=KW_CONFLICT.find(p=>p.every(x=>S.picked[x]));
+    if(bad){S.paperMsg=`✕ 汇报里同时写了「${bad[0]}」和「${bad[1]}」，这两句互相矛盾，请留一句、删掉另一句再交。`;save();paperPage();return;}
     const hits=KWS.filter(k=>S.picked[k]).length;
-    if(hits>=9&&S.picked["魔神仔无影"]){
+    if(hits>=KW_NEED&&S.picked["魔神仔无影"]){
       if(!S.c1.replay){ if(!S.c1.done)S.cases=(S.cases||0)+1; S.casePoint+=40; }
       S.c1.done=true;
       S.grade=S.ending==="A"?"地道":(S.ending==="B"?"通过（降一档）":"通过（不加分）");
@@ -864,8 +883,8 @@ function paperPage(){
     S.fail=(S.fail||0)+1;
     let m="";
     if(!S.picked["魔神仔无影"])m="✕ 汇报里没写清「魔神仔无影」，组织只认这一句。";
-    else m=`✕ 关键词只命中 ${hits}/11。案由要有人、有声、有地点。`;
-    if(S.fail>=2)m+="<br>再看一眼：阿伯听到三声叫名、是查某声；阿弟看见细细汉与狗仔；礁石上是阿嬷在喊阿明。";
+    else m=`✕ 正确关键词只命中 ${hits}/8 条，要 ≥${KW_NEED}。案由要有人、有声、有地点，勾错的项不计数。`;
+    if(S.fail>=2)m+="<br>再看一眼：阿伯听到三声叫名、是查某声；阿弟看见细细汉与狗仔；还有阿嬷，以及那句最要紧的「魔神仔无影」。";
     S.paperMsg=m;save();paperPage();
   };
 }
